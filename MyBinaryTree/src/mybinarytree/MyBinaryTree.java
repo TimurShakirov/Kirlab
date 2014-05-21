@@ -18,6 +18,10 @@ public class MyBinaryTree<E> {
         this.head = null;
     }
 
+    public MyBinaryTree(Element head) {
+        this.head = head;
+    }
+
     public boolean isEmpty() {
         return this.head == null;
     }
@@ -61,20 +65,40 @@ public class MyBinaryTree<E> {
             return getElement(key, element.left);
         }
     }
-/*готовился с выступлением по функциональному программированию, забыл доделать этот метод
-    private void removeElement(String key, Element element) {
-        if (key.compareTo(element.left.key) == 0) {
-            if (element.left.left == null && element.left.right == null) {
-                element.left = null;
-            }
-            if (element.left.left != null && element.left.right == null) {
-                element.left = element.left.left;
-            }
-            if (element.left.left == null && element.left.right != null) {
-                element.left = element.left.right;
-            }
-            if (element.left.left != null && element.left.right != null) {
 
+    private void removeElement(String key, Element element) {
+        if (element == null) {
+            return;
+        }
+        if (key.compareTo(element.key) > 0) {
+            removeElement(key, element.right);
+        }
+        if (key.compareTo(element.key) < 0) {
+            removeElement(key, element.left);
+        }
+        if (key.compareTo(element.key) == 0) {
+            if (element.left == null && element.right == null) {
+                element = null;
+            }
+            if (element.left != null && element.right == null) {
+                element = element.left;
+            }
+            if (element.left == null && element.right != null) {
+                element = element.right;
+            }
+            if (element.left != null && element.right != null) {
+                Element temp = element.right;
+                Element parent = element.right;
+                while (temp.left != null) {
+                    temp = temp.left;
+                }
+                element.key = temp.key;
+                element.value = temp.value;
+                while (parent.left != temp) {
+                    parent = parent.left;
+                }
+                parent.left = temp.right;
+                temp = null;
             }
         }
     }
@@ -82,18 +106,8 @@ public class MyBinaryTree<E> {
     public void remove(String key) {
         Element temp = this.head;
         if (this.isEmpty()) {
-            System.out.println("Tree is empty");
         } else {
-
-        }
-    }
-*/
-    public Element get(String key) {
-        Element temp = this.head;
-        if (this.isEmpty()) {
-            return null;
-        } else {
-            return getElement(key, temp);
+            removeElement(key, temp);
         }
     }
 }
